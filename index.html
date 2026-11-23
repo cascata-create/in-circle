@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>數位足跡偵探｜社群探索任務</title>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  如何放入自己的圖片與影片                                    ║
+     ╠══════════════════════════════════════════════════════════════╣
+     ║ 1. 在 index.html 旁邊建立資料夾 images/，裡面再分：          ║
+     ║      avatars/ 頭像   posts/ 貼文（圖或影片）                 ║
+     ║      stories/ 限時動態（圖或影片）  reels/ 短影音             ║
+     ║      highlights/ 精選動態圓形封面                            ║
+     ║ 2. 資料裡的路徑有 3 種寫法：                                 ║
+     ║    ‧ 不寫副檔名 'images/posts/school'                        ║
+     ║      → 自動依序找 jpg、jpeg、png、webp、gif、mp4、webm、mov   ║
+     ║      （最方便；檔案很多時第一次載入會多試幾次）              ║
+     ║    ‧ 寫完整檔名 'images/posts/school.mp4'（最快、最穩）      ║
+     ║    ‧ 留空 ''（或找不到檔案）→ 顯示原本的表情符號             ║
+     ║ 3. 資料裡的 avatar／img／media 若整個欄位不寫，會用預設檔名： ║
+     ║    頭像 images/avatars/帳號名   貼文 images/posts/貼文id      ║
+     ║    限動 images/stories/群組key_第幾張（例 yuyu_1）           ║
+     ║    Reels images/reels/reel_第幾則   精選 images/highlights/key║
+     ║    ※ 副檔名都可以是 jpg／png／webp／mp4 等                  ║
+     ║ 4. 影片：貼文、限動放 mp4 會自動靜音循環播放；               ║
+     ║    Reels 點一下暫停／播放，右側 🔇 可開聲音；                ║
+     ║    建議用 mp4（H.264 + AAC），手機才播得出來。               ║
+     ║ 5. 建議尺寸：頭像 1:1、貼文 1:1、限動與 Reels 9:16（直式）。 ║
+     ║ 6. 要改文字、留言、訊息、Reels，只需改下面「★ 可編輯區」。   ║
+     ║    「⚙ 程式邏輯區」不用動。                                  ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ★★★ 可編輯區（資料）：所有人物、帳號、地點與訊息均為虛構 ★★★
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────────────
+   區 1｜品牌名稱與帳號（頭像圖片在這裡設定）
+   avatar：頭像圖片路徑；emoji：沒有圖時顯示的表情符號
+   ───────────────────────────────────────────── */
+const APP_NAME='IN-Circle';
+
+const ACCOUNTS = {
+  'yuyu.lin': {
+    label: '林語澄',
+    avatar: 'images/avatars/yuyu.png'
+  },
+  'ting_031': {
+    label: '庭庭',
+    avatar: 'images/avatars/ting.png'
+  },
+  'an_an.kk': {
+    label: '安安',
+    avatar: 'images/avatars/anan.png'
+  },
+  'gmh_volley': {
+    label: '光明排球隊',
+    avatar: 'images/avatars/volley.png'
+  },
+  'drink_daily': {
+    label: '樂喝日常',
+    avatar: 'images/avatars/drink.png'
+  },
+  'mimi_09': {
+    label: '咪咪',
+    avatar: 'images/avatars/mimi.png'
+  },
+  'coach_lee': {
+    label: '李教練',
+    avatar: 'images/avatars/coach.png'
+  },
+  'gmh_welfare': {
+    label: '光明排球隊福利組',
+    avatar: 'images/avatars/welfare.png'
+  }
+};
+
+/* ─────────────────────────────────────────────
+   區 2｜首頁貼文（貼文圖片在 img 設定）
+   img：貼文照片路徑（建議 1:1 正方形）
+   place：定位標籤；comments：[帳號, 留言內容]
+   想新增貼文：複製一整段 {…}，換掉 id（id 不可重複）
+   ───────────────────────────────────────────── */
+const posts=[
+{id:'school',user:'yuyu.lin',sub:'光明國中 · 3 小時前',img:'images/posts/school',scene:'school',art:'🏫🌳',place:'光明國中',caption:'今天練球累到不行，但大家一起努力真的很棒！🏐 #光明排球隊',likes:'1,286',time:'3 小時前',comments:[['ting_031','今天練球超認真！下週二、四也要一起去喔～'],['gmh_volley','光明排球隊最棒！明天 16:10 照常練習'],['an_an.kk','校門口那棵樹拍起來好漂亮！'],['mimi_09','這是哪間學校呀？']]},
+{id:'friends',user:'ting_031',sub:'你可能也認識 · 昨天',img:'images/posts/friends',scene:'friends',art:'👭📸',place:'放學後',caption:'每週二、四的固定行程又完成了！下次還是老地方～ @yuyu.lin',likes:'342',time:'昨天',comments:[['yuyu.lin','今天真的好好玩！下次一樣時間～'],['an_an.kk','你們又去那間店了嗎？'],['ting_031','對呀，放學後都會去一下！']]},
+{id:'drink',user:'yuyu.lin',sub:'樂喝飲料店 · 2 天前',img:'images/posts/drink',scene:'drink',art:'🧋🍓',place:'樂喝飲料店',caption:'半糖少冰還是最讚！每週二、四都要來一杯 🧋',likes:'896',time:'2 天前',comments:[['ting_031','下次幫我買一杯！你都幾點到？'],['yuyu.lin','大概補習前，固定那個時間呀～'],['drink_daily','謝謝常常來店裡！'],['mimi_09','這家在哪裡？']]},
+{id:'park',user:'an_an.kk',sub:'附近公園 · 3 天前',img:'images/posts/park',scene:'park',art:'🌇🚶',place:'附近公園',caption:'每天 17:30 都會遇到熟悉的人 🌳',likes:'205',time:'3 天前',comments:[['ting_031','是不是語語？她每天都走那條路！'],['an_an.kk','哈哈對呀，超巧的'],['yuyu.lin','被發現了啦！']]},
+{id:'court',user:'gmh_volley',sub:'光明國中體育館 · 4 天前',img:'images/posts/court',scene:'court',art:'🏐',place:'光明國中體育館',caption:'每週一、三、五放學後練球！一起為比賽努力。',likes:'2,401',time:'4 天前',comments:[['yuyu.lin','今天接球進步好多！'],['coach_lee','下週比賽名單記得確認'],['ting_031','語語加油！']]},
+{id:'study',user:'yuyu.lin',sub:'書桌 · 5 天前',img:'images/posts/study',scene:'study',art:'📚✏️',place:'個人空間',caption:'明天要考英文，今天先讀到這裡 📖',likes:'401',time:'5 天前',comments:[['ting_031','你不是週四還要補習嗎？'],['yuyu.lin','對呀，放學後直接過去！']]},
+{id:'cat',user:'yuyu.lin',sub:'生活日常 · 1 週前',img:'images/posts/cat',scene:'cat',art:'🐈',place:'家裡',caption:'今天回家被小貓療癒了！每天回家牠都在窗邊等我。',likes:'728',time:'1 週前',comments:[['an_an.kk','牠又跑到窗邊了！'],['yuyu.lin','對啊，每天都在這裡等我']]},
+{id:'team',user:'gmh_volley',sub:'比賽日 · 1 週前',img:'images/posts/team',scene:'court',art:'🏆🏐',place:'光明國中',caption:'比賽日！明天早上 07:10 校門口集合，謝謝大家來加油。',likes:'1,050',time:'1 週前',comments:[['yuyu.lin','第一次先發好緊張！'],['coach_lee','相信自己，妳準備好了']]},
+{id:'diary',user:'yuyu.lin',sub:'摯友 · 2 週前',img:'images/posts/diary',scene:'study',art:'📝',place:'私人日記',caption:'有時候真的很希望大家可以理解我，今天先把心情寫下來。',likes:'126',time:'2 週前',comments:[['ting_031','有需要我都在喔'],['yuyu.lin','謝謝你，這篇只有摯友看得到。']]}
+];
+
+/* ─────────────────────────────────────────────
+   區 3｜限時動態（首頁上方圓圈 + 個人檔案精選動態）
+   每個群組有多張 slides，格式：{text:文字, clue:對應線索id, img:圖片路徑}
+   img 建議直式 9:16；沒有圖片時會顯示文字置中的彩色背景
+   ───────────────────────────────────────────── */
+/* 首頁上方圓圈的順序（對應下面 storyGroups 的 key） */
+const storyOrder=['yuyu','ting','an','team','food','mimi'];
+
+const storyGroups={
+ yuyu:{user:'yuyu.lin',slides:[
+  {text:'📍 光明國中體育館<br><br>今天練球到 18:00！<br>每週一、三、五都在這裡 🏐',clue:'court',img:'images/stories/yuyu_1'},
+  {text:'🏫 校門口集合<br><br>放學後直接去球場～',clue:'school',img:'images/stories/yuyu_2'},
+  {text:'🧋 補習前先來一杯<br><br>老地方，固定時間 ☺️',clue:'drink',img:'images/stories/yuyu_3'}]},
+ ting:{user:'ting_031',slides:[
+  {text:'🧋 放學後的快樂<br><br>每週二、四的老地方見！<br>17:40 不見不散',clue:'friends',img:'images/stories/ting_1'},
+  {text:'👭 今天又和語語出來<br><br>下次一樣時間～',clue:'friends',img:'images/stories/ting_2'}]},
+ an:{user:'an_an.kk',slides:[
+  {text:'🌇 17:30 的夕陽<br><br>每天都會經過這座公園',clue:'park',img:'images/stories/an_1'},
+  {text:'🚶 又遇到熟悉的人<br><br>同一條路、同一個時間',clue:'park',img:'images/stories/an_2'}]},
+ team:{user:'gmh_volley',slides:[
+  {text:'🏆 明天比賽！<br><br>集合時間 07:10，光明國中校門口',clue:'team',img:'images/stories/team_1'},
+  {text:'🏐 練習提醒<br><br>每週一、三、五 16:10 體育館',clue:'court',img:'images/stories/team_2'}]},
+ food:{user:'drink_daily',slides:[
+  {text:'🥤 今日推薦：草莓奶蓋<br><br>謝謝熟客語語每週來報到',clue:'drink',img:'images/stories/food_1'}]},
+ mimi:{user:'mimi_09',slides:[
+  {text:'📸 今天的校園角落<br><br>猜猜這是哪裡？',clue:'school',img:'images/stories/mimi_1'}]},
+ /* 以下是個人檔案的「精選動態」內容 */
+ matchday:{user:'yuyu.lin',slides:[
+  {text:'🏆 比賽日<br><br>第一次先發，好緊張！',clue:'team',img:'images/stories/matchday_1'},
+  {text:'📍 光明國中<br><br>明早 07:10 校門口集合',clue:'team',img:'images/stories/matchday_2'}]},
+ school:{user:'yuyu.lin',slides:[
+  {text:'🏫 校園日常<br><br>今天放學後繼續練球',clue:'school',img:'images/stories/school_1'}]},
+ friends:{user:'yuyu.lin',slides:[
+  {text:'👭 好朋友日常<br><br>下次一樣週二、週四見',clue:'friends',img:'images/stories/friends_1'}]},
+ daily:{user:'yuyu.lin',slides:[
+  {text:'🧋 放學儀式感<br><br>固定的時間、固定的飲料',clue:'drink',img:'images/stories/daily_1'},
+  {text:'📖 讀書時間<br><br>週四放學後還要補習',clue:'study',img:'images/stories/daily_2'}]},
+ cat:{user:'yuyu.lin',slides:[
+  {text:'🐈 家裡的小可愛<br><br>每天回家都在窗邊等我',clue:'cat',img:'images/stories/cat_1'}]}
+};
+
+/* ─────────────────────────────────────────────
+   區 4｜Reels 短影音（上下滑動切換）
+   media：圖片（.jpg/.png）或影片（.mp4/.webm）路徑，建議直式 9:16
+   想新增一則 Reels：複製一整行 {…}，貼在最後一行前面，記得結尾逗號
+   ───────────────────────────────────────────── */
+const REELS = [
+  {
+    user: 'gmh_volley',
+    text: '今天練球日常！每週一、三、五放學後一起加油 💪',
+    audio: '♬ 原創音訊 · 光明排球隊',
+    likes: '2,401',
+    media: 'videos/yuyuvolley.mp4',
+    type: 'video'
+  },
+  {
+    user: 'yuyu.lin',
+    text: '放學後的固定小確幸，今天一樣半糖少冰！',
+    audio: '♬ 日常片段',
+    likes: '896',
+    media: 'videos/drink.mp4',
+    type: 'video'
+  },
+  {
+    user: 'an_an.kk',
+    text: '每天傍晚散步時看到的天空。',
+    audio: '♬ sunset',
+    likes: '205',
+    media: 'videos/sunset.mp4',
+    type: 'video'
+  },
+  {
+    user: 'gmh_volley',
+    text: '比賽日倒數！一起為球隊加油！',
+    audio: '♬ 原創音訊 · 加油',
+    likes: '1,050',
+    media: 'videos/my_video_4.mp4',
+    type: 'video'
+  },
+  {
+    user: 'ting_031',
+    text: '週二、週四放學後的老地方～',
+    audio: '♬ 好朋友',
+    likes: '342',
+    media: 'videos/my_video_5.mp4',
+    type: 'video'
+  }
+];
+
+/* ─────────────────────────────────────────────
+   區 5｜私訊對話（點螢幕逐則顯示）
+   msgs 格式：['them' 對方 或 'mine' 自己, 訊息文字]
+   想新增對話：複製一整段，換 key（例如 mimi），並確認 user 在區 1 有設定
+   ───────────────────────────────────────────── */
+const chats={
+ ting:{user:'ting_031',clue:'friends',msgs:[['them','週四一樣 17:40 嗎？我先去幫你買飲料～'],['mine','好呀！我補習前會到，還是去樂喝！'],['them','那老地方見！'],['mine','好～不要忘記半糖少冰 🧋']]},
+ an:{user:'an_an.kk',clue:'park',msgs:[['them','我每天放學都會經過那個公園！'],['mine','哈哈我也是，差不多 17:30。'],['them','那應該常常會遇到你！']]},
+ team:{user:'gmh_volley',clue:'court',msgs:[['them','明天練球 16:10，老地方集合。'],['mine','收到！我會準時到。'],['them','比賽前記得確認名單，週五見！']]},
+ /* 沒有 clue 的對話＝一般安全對話（可當作對照）。不用 need 就一開始出現 */
+ coach:{user:'coach_lee',clue:null,msgs:[['them','比賽名單我放在隊上群組，記得看。'],['mine','好的教練！'],['them','有問題直接問我就好，不用在公開貼文留言喔。'],['mine','了解，謝謝教練 🙏']]},
+
+ /* ▼ 以下對話有 need：蒐集到指定線索後才會出現在訊息匣（need 填線索 id，全部蒐集到才解鎖） ▼ */
+ stranger:{user:'mimi_09',clue:'stranger',need:['school','drink'],msgs:[['them','嗨～你是光明國中排球隊的林語澄嗎？'],['mine','對呀，你是？'],['them','我在你的貼文看到的！你每週四補習前都會去樂喝對吧？'],['them','我剛好也在附近，要不要週四 17:40 一起喝一杯？'],['mine','好呀，那我到時候去～']]},
+ phish:{user:'gmh_welfare',clue:'phish',need:['court','team'],msgs:[['them','恭喜！你被選為光明排球隊比賽日「幸運球員」🎁'],['them','為了寄送福袋，請回覆：全名、班級、手機號碼與家裡地址'],['mine','好喔，我等一下填給你'],['them','也告訴我你每天幾點到家，宅配才好安排 📦']]},
+ shot:{user:'an_an.kk',clue:'screenshot',need:['diary','friends'],msgs:[['them','欸……我把你昨天摯友貼文的截圖傳到班群了，大家都在討論 😂'],['mine','什麼？那個只有摯友才看得到啊！'],['them','我以為沒關係，對不起，現在好多人看過了'],['mine','我只是想要有人理解我而已……']]}
+};
+
+/* ─────────────────────────────────────────────
+   區 6｜個人檔案與精選動態
+   ───────────────────────────────────────────── */
+const PROFILE={user:'yuyu.lin',name:'林語澄',followers:'684',following:'512',
+ bio:'🏐 volleyball｜生活紀錄<br>📍 Taipei<br>光明國中・排球隊<br>有陽光、有朋友、有珍奶 ☀️'};
+
+/* 精選動態圓圈：key 對應區 3 的 storyGroups；cover 是圓形封面圖 */
+const HIGHLIGHTS=[
+ {key:'matchday',label:'比賽日',emoji:'🏆',cover:'images/highlights/matchday'},
+ {key:'school',  label:'校園',  emoji:'🏫',cover:'images/highlights/school'},
+ {key:'friends', label:'朋友',  emoji:'👭',cover:'images/highlights/friends'},
+ {key:'daily',   label:'日常',  emoji:'🧋',cover:'images/highlights/daily'},
+ {key:'cat',     label:'小可愛',emoji:'🐈',cover:'images/highlights/cat'}
+];
+
+/* 個人檔案「貼文」分頁顯示哪些貼文（貼文數會自動等於這裡的數量）；填區 2 的 id */
+const PROFILE_POSTS=['school','court','drink','friends','study','park','cat','diary','team'];
+/* 個人檔案的 Reels 分頁、被標註分頁 */
+const PROFILE_REELS=['court','team','park'];
+const PROFILE_TAGGED=['friends','team','drink'];
+/* 搜尋探索頁的九宮格（填區 2 的 id，可重複） */
+const EXPLORE_POSTS=['court','study','drink','friends','park','cat','school','team','diary','friends','park','drink'];
+
+/* ─────────────────────────────────────────────
+   區 7｜通知頁內容
+   ───────────────────────────────────────────── */
+const ACTIVITY=[
+ {user:'ting_031',text:'在你的貼文中標註了你：下次還是老地方！',time:'2 小時'},
+ {user:'gmh_volley',text:'在限時動態中提及你。',time:'5 小時'},
+ {user:'an_an.kk',text:'和其他 12 人說讚了你的照片。',time:'1 天'},
+ {user:'drink_daily',text:'提到熟客語語每週都會來店裡。',time:'2 天'}
+];
+
+/* 蒐集到指定線索後才會出現的通知（need：線索 id 全部蒐集到才解鎖；chat：點下去會開啟的對話 key，可省略） */
+const ACTIVITY_LOCKED=[
+ {need:['school','drink'],user:'mimi_09',chat:'stranger',text:'傳送了一則訊息請求：「嗨～你是光明國中排球隊的嗎？」',time:'剛剛'},
+ {need:['court','team'],user:'gmh_welfare',chat:'phish',text:'傳送了一則私訊：「恭喜入選幸運球員！」',time:'剛剛'},
+ {need:['diary','friends'],user:'an_an.kk',chat:'shot',text:'傳送了一則私訊給你。',time:'剛剛'},
+ {need:['drink','park','friends'],user:'mimi_09',text:'查看了你的個人檔案與全部限時動態。',time:'剛剛'}
+];
+
+/* ─────────────────────────────────────────────
+   區 8｜調查筆記的線索
+   pts：找到這條線索可增加的調查進度（％）。全部加起來請剛好 = 100，每條可以不一樣。
+   why／danger／tip：打開調查筆記後，「為什麼有風險／可能的危險／更安全的做法」的說明
+   線索全部蒐集完（100%）才會出現結案任務。
+   ───────────────────────────────────────────── */
+const clueData={
+school:{pts:7,title:'校園與身分線索',detail:'地標、校門或制服等背景，可能讓人辨識就讀學校。',source:'yuyu.lin 的校園貼文',type:'身分／地點',
+ why:'定位、校門與制服等背景，都能讓人知道她就讀哪間學校。單看只是日常，但它常是「找到這個人」的第一步。',
+ danger:'陌生人可以在放學時間到校門口等候，或冒充學長姐、親戚搭話；也可能整理她的就讀資料去搜尋其他平台。',
+ tip:'發文前檢查定位與照片背景，避免出現校名、校門、制服名牌；要分享也可以等離開現場之後再發。'},
+friends:{pts:9,title:'朋友留言透露固定行程',detail:'朋友的留言與標註把「每週二、四」的行程說出來了。',source:'ting_031 的貼文與留言',type:'人際／時間',
+ why:'別人替你公開的資訊，你很難控制。朋友的公開留言把固定日期、同行的人都說出來，還標註了她的帳號。',
+ danger:'固定日期＋固定同伴＝可預測的行蹤。有心人能知道哪幾天、和誰、大概會在哪一帶出現。',
+ tip:'和朋友約好：不在公開留言說彼此的行程與地點；合照與標註要先徵求對方同意。'},
+drink:{pts:9,title:'常去店家與時間習慣',detail:'定位、星期與店家的回覆，確認了她是這家店的熟客。',source:'yuyu.lin 的飲料店貼文',type:'地點／習慣',
+ why:'店家定位、固定的星期與時間，加上店家自己回覆「常常來店裡」，等於替路人確認了熟客身分與作息。',
+ danger:'有人可以「剛好」在店裡或店外遇到她，也可能跟蹤到補習班或回家路線，或用「你常買的飲料」假裝熟人。',
+ tip:'少用即時定位，改成離開後再發；不要寫出頻率與時間；不回覆透露習慣的留言。'},
+park:{pts:10,title:'固定出現的地點與時間',detail:'「每天 17:30」「那條路」讓路線與時間被拼出來。',source:'an_an.kk 的貼文與留言',type:'時間／路線',
+ why:'每天固定的時間、固定的路線，同時出現在文字與朋友留言裡，是最容易被「預測」的資訊。',
+ danger:'日常路線被掌握後，有人可能在偏僻路段等候、尾隨，是最直接的人身安全風險。',
+ tip:'不要公開「每天幾點、走哪條路」；偶爾換路線；也請朋友不要在留言替你說出來。'},
+court:{pts:8,title:'社團活動與練習時段',detail:'隊伍帳號、定位與文字透露團體名稱及固定練習時間。',source:'Reels／排球隊帳號／體育館貼文',type:'活動／時間',
+ why:'社團名稱、場館與練習時段公開後，任何人都知道她「週一、三、五放學後」會在哪裡。',
+ danger:'在場館外等人、冒充球隊相關人員接近，或在她落單時出現。',
+ tip:'團體帳號的練習時間可改成只對隊員可見；個人不要重複轉發時間地點。'},
+study:{pts:6,title:'課業與生活安排',detail:'考試、補習與放學後的安排，拼出一週的生活節奏。',source:'yuyu.lin 的生活貼文與留言',type:'生活習慣',
+ why:'「週四補習」「放學後直接過去」讓人知道一週的作息：哪天去補習、什麼時候落單。',
+ danger:'知道什麼時候不在家、什麼時候獨自移動，補習班出口也變成可以堵到人的地點。',
+ tip:'作息類內容避免說出「週幾、去哪」的完整句；需要分享給朋友就用私訊。'},
+cat:{pts:8,title:'照片背景中的生活細節',detail:'窗景、家裡環境與回家時間透露生活環境。',source:'yuyu.lin 的生活貼文',type:'背景資訊',
+ why:'窗外景物可能被比對出住處大致位置；「每天回家牠都在窗邊等我」透露回家時間，朋友留言也暗示有人常看到她家的窗戶。',
+ danger:'住處範圍被縮小，加上回家時間，有人就知道什麼時候家裡只有她。',
+ tip:'拍家裡的照片避開窗外街景、門牌與可辨識的建築；不要說「每天幾點在家」。'},
+team:{pts:8,title:'團體活動與集合資訊',detail:'公開的比賽日期、集合時間和地點。',source:'gmh_volley 的比賽貼文與限時動態',type:'活動／地點',
+ why:'比賽集合的時間與地點被公開，是一份完整的行程表，而且「大家一定會到」。',
+ danger:'活動前後人潮聚集、成員落單時，容易被人冒充工作人員、記者搭訕，或被惡意干擾。',
+ tip:'行前通知用球隊群組私下發送；公開貼文等活動結束後再分享。'},
+diary:{pts:7,title:'情緒與私人內容',detail:'私人心情給摯友看，仍可能被截圖、轉傳。',source:'yuyu.lin 的摯友貼文',type:'隱私／同意',
+ why:'「只有摯友看得到」不代表不會被傳出去；「希望有人理解我」這種情緒也容易被人利用來拉近關係。',
+ danger:'內容被截圖後就失去控制，可能被當成八卦、被嘲笑；也可能有人假裝同情，慢慢取得信任。',
+ tip:'寫私人心情前想想：這句話被轉給全班可以嗎？難過時優先找信任的大人，而不是發在社群。'},
+bio:{pts:4,title:'簡介與名稱公開了身分',detail:'真實全名、學校、社團與城市都寫在個人簡介裡。',source:'yuyu.lin 的個人檔案',type:'身分／基本資料',
+ why:'真實全名、學校、社團、城市放在一起，一個畫面就能拼出「她是誰、在哪裡」。',
+ danger:'任何陌生人點進來就能拿全名去搜尋其他平台，用來冒充、搭訕或做更多調查。',
+ tip:'簡介只寫興趣就好，避免全名、學校與城市；帳號可以設為私人。'},
+stranger:{pts:9,title:'陌生人用公開資訊套近乎',detail:'陌生帳號把學校、店家與時間拼起來，再邀約見面。',source:'mimi_09 的私訊',type:'陌生人／社交工程',
+ why:'對方把你公開的資訊一項項拼起來，再用「剛好也在附近」製造巧合感，讓人放下戒心。',
+ danger:'可能被誘騙單獨見面、被騷擾，或成為進一步要求更多個資的開始。',
+ tip:'不認識的人詢問行程：不回、不見面，先封鎖，並告訴信任的大人。'},
+phish:{pts:8,title:'假冒團體索取個資',detail:'假冒球隊福利組，要求全名、電話、住址與到家時間。',source:'gmh_welfare 的私訊',type:'詐騙／個資',
+ why:'對方利用「你真的有參加球隊」這件公開資訊取得信任，再用「獎品」當理由索取個資。',
+ danger:'個資可能被拿去詐騙、冒名申請，而「幾點到家」更是直接洩漏行蹤。',
+ tip:'收到索取全名、手機、地址的訊息，先用另一個管道向教練或老師確認；真正的活動不會要你私訊個資。'},
+screenshot:{pts:7,title:'私人內容被截圖轉傳',detail:'摯友限定的心情貼文被截圖傳到班級群組。',source:'an_an.kk 的私訊',type:'隱私／同意',
+ why:'截圖與轉傳不需要你的同意，「只有摯友」只能限制誰看得到，不能限制看到的人做什麼。',
+ danger:'私人情緒變成大家議論的話題，可能引發霸凌，而且很難完全刪除。',
+ tip:'發之前先問自己：這則真的不能被傳出去嗎？發現被轉傳時保留證據、請對方刪除，並向師長求助。'}
+};
+
+/* 組合推論：need 的線索都蒐集到，就會在筆記顯示（說明「資訊組合起來比單獨更危險」） */
+const COMBOS=[
+ {need:['school','court'],t:'📍 <b>她在哪裡：</b>學校＋排球隊練習時間 → 能知道「週一、三、五放學後」會在體育館。'},
+ {need:['drink','friends'],t:'🧋 <b>週二、四的行程：</b>常去的店＋朋友的留言 → 固定時間與地點，形成可預測的碰面點。'},
+ {need:['park','study'],t:'🛤️ <b>移動路線：</b>每天 17:30 的公園＋補習安排 → 能推出放學後的移動路線。'},
+ {need:['bio','school'],t:'🪪 <b>她是誰：</b>全名＋學校＋社團 → 很容易搜尋到她的其他帳號與照片。'},
+ {need:['cat','park'],t:'🏠 <b>住家範圍：</b>窗景＋回家時間＋回家路線 → 能縮小她住的範圍。'},
+ {need:['team','court'],t:'📅 <b>活動行程：</b>比賽集合時間＋練習時段 → 能知道哪些時段她人在哪裡、容易落單。'}
+];
+
+/* ─────────────────────────────────────────────
+   區 9｜貼文「偵查點」：打開貼文後，可以點頭像、照片、定位、貼文文字、留言
+   a：位置（avatar 頭像／photo 照片／place 定位／caption 貼文文字／comment 留言（用 i 指第幾則，從 0 開始））
+   r：1＝真的有風險（會給線索 c）；0＝不是主要風險（記錄在「我判斷過的地方」）
+   w：點了之後顯示的說明。沒寫到的位置，點了會顯示「沒有明顯風險」。
+   profile 是個人檔案頁（name 名稱、bio 簡介、avatar 頭像）
+   ───────────────────────────────────────────── */
+const SPOTS={
+school:[
+ {a:'place',r:1,c:'school',w:'定位直接標出「光明國中」，任何人都知道她就讀哪裡。'},
+ {a:'photo',r:1,c:'school',w:'校門、校舍、樹木與制服都是容易辨認的背景，和定位疊在一起，地點就更確定了。'},
+ {a:'avatar',r:0,w:'頭像本身只是辨識帳號用。要看內容：若是清楚正臉＋制服，疊加其他資訊時就更容易被認出。這張目前不是主要問題。'},
+ {a:'caption',r:0,w:'「練球好累」只是心情分享，沒有新增行程或地點；真正的問題在定位與照片背景。'},
+ {a:'comment',i:0,r:1,c:'friends',w:'朋友在公開留言說出「下週二、四」，等於替她公開了固定時間。'},
+ {a:'comment',i:1,r:1,c:'court',w:'球隊帳號在公開留言寫出「明天 16:10 練習」，連時間都給了。'},
+ {a:'comment',i:2,r:0,w:'單純稱讚照片，沒有新資訊。但它再次確認了拍攝地點，要小心被和其他線索拼在一起。'},
+ {a:'comment',i:3,r:0,w:'陌生帳號問學校是警訊，但這句本身沒有洩漏資訊。重點是不要回答，如果一直追問就封鎖。'}],
+friends:[
+ {a:'photo',r:1,c:'friends',w:'合照露出朋友的臉與制服。別人的肖像要先徵求同意，也容易被用來辨識她們的學校。'},
+ {a:'place',r:0,w:'只寫「放學後」，沒有具體地點，這個定位本身不算洩漏。'},
+ {a:'caption',r:1,c:'friends',w:'「每週二、四的固定行程」加上標註 @yuyu.lin，把頻率和人物連在一起。'},
+ {a:'comment',i:0,r:1,c:'friends',w:'「下次一樣時間」再度確認固定行程，是朋友之間公開的約定。'},
+ {a:'comment',i:1,r:0,w:'只是好奇有沒有再去，沒有新資訊。但「那間店」提醒我們：朋友的對話常常默默補完地點。'},
+ {a:'comment',i:2,r:0,w:'回答很短，沒有店名或時間，單看風險低。'}],
+drink:[
+ {a:'place',r:1,c:'drink',w:'定位公開了常去的店。'},
+ {a:'caption',r:1,c:'drink',w:'「每週二、四」把去店裡的頻率說出來。'},
+ {a:'photo',r:0,w:'只是一杯飲料，沒有人臉或招牌。不過如果杯套有名字或店名，就要留意。'},
+ {a:'comment',i:0,r:0,w:'朋友問時間本身沒洩漏什麼，但它引出了後面的回答。'},
+ {a:'comment',i:1,r:1,c:'drink',w:'她自己回答「補習前、固定那個時間」，親口公開了作息。'},
+ {a:'comment',i:2,r:1,c:'drink',w:'店家公開說「常常來店裡」，確認她是熟客，路人看了就知道哪裡找得到她。'},
+ {a:'comment',i:3,r:0,w:'陌生帳號問店在哪是警訊，但這句本身沒有洩漏資訊；不回答才是關鍵。'}],
+park:[
+ {a:'caption',r:1,c:'park',w:'「每天 17:30」給了固定時間，是最容易被預測的資訊。'},
+ {a:'place',r:1,c:'park',w:'定位標出公園，讓時間有了地點。'},
+ {a:'photo',r:0,w:'夕陽景色沒有明顯地標與人臉，單看風險低；如果拍到路牌或大樓就要留意。'},
+ {a:'comment',i:0,r:1,c:'park',w:'朋友說「她每天都走那條路」，直接替她公開了路線。'},
+ {a:'comment',i:1,r:0,w:'只是附和，沒有新增資訊。'},
+ {a:'comment',i:2,r:0,w:'被發現的玩笑，沒有新增資訊。'}],
+court:[
+ {a:'place',r:1,c:'court',w:'體育館的定位＝練習地點。'},
+ {a:'caption',r:1,c:'court',w:'「每週一、三、五放學後」是公開的固定時段。'},
+ {a:'photo',r:0,w:'球場照片沒有明顯人臉，主要資訊已在定位與文字。'},
+ {a:'comment',i:0,r:0,w:'運動心得，沒有行程資訊。'},
+ {a:'comment',i:1,r:0,w:'「比賽名單」沒寫時間地點，風險較低；不過這是球隊事務，更適合在群組討論。'},
+ {a:'comment',i:2,r:0,w:'加油打氣，沒有洩漏資訊。'}],
+study:[
+ {a:'caption',r:0,w:'「明天要考英文」透露一點作息，但不具體，風險較低；真正的問題在留言。'},
+ {a:'place',r:0,w:'「個人空間」沒有地址。'},
+ {a:'photo',r:0,w:'書桌照片沒有明顯資訊；如果看得到姓名貼紙或課本封面就要小心。'},
+ {a:'comment',i:0,r:1,c:'study',w:'朋友公開「週四還要補習」，把一週行程說出來。'},
+ {a:'comment',i:1,r:1,c:'study',w:'她回答「放學後直接過去」，確認了放學後的去向。'}],
+cat:[
+ {a:'photo',r:1,c:'cat',w:'窗景與室內背景，可能被拿來比對住處的大概位置。'},
+ {a:'caption',r:1,c:'cat',w:'「每天回家牠都在窗邊等我」透露回家時間與窗戶的位置。'},
+ {a:'place',r:0,w:'只寫「家裡」，沒有地址；但標示「在家」要看搭配了哪些資訊。'},
+ {a:'comment',i:0,r:1,c:'cat',w:'朋友說「牠又跑到窗邊了」，暗示有人常看到她家的窗戶。'},
+ {a:'comment',i:1,r:0,w:'再次確認「每天」，沒有新增資訊，但別人整理習慣時會用到。'}],
+team:[
+ {a:'caption',r:1,c:'team',w:'「明天 07:10 校門口集合」公開了時間與地點。'},
+ {a:'place',r:1,c:'team',w:'定位標出光明國中，把活動與學校綁在一起。'},
+ {a:'photo',r:0,w:'團體照沒有明確個資；如果能看到姓名與背號才要留意。'},
+ {a:'comment',i:0,r:0,w:'心情分享，沒有新增行程資訊。'},
+ {a:'comment',i:1,r:0,w:'鼓勵的話，沒有風險。'}],
+diary:[
+ {a:'caption',r:1,c:'diary',w:'私人情緒文字就算只給摯友看，也可能被截圖或轉傳。'},
+ {a:'comment',i:0,r:0,w:'朋友表達關心，是好的支持；這則留言本身沒有問題。'},
+ {a:'comment',i:1,r:1,c:'diary',w:'「只有摯友看得到」是一種信任，但不代表截圖與轉傳不會發生。'},
+ {a:'photo',r:0,w:'日記頁面沒有明顯資訊。'}],
+profile:[
+ {a:'name',r:1,c:'bio',w:'真實全名公開，可以拿去搜尋其他平台。'},
+ {a:'bio',r:1,c:'bio',w:'學校、社團、城市寫在一起，一個畫面就能拼出身分。'},
+ {a:'avatar',r:0,w:'頭像是否有風險要看內容（清楚正臉、制服、校徽）。這張目前不是主要風險。'}]
+};
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     🎨 樣式區（一般不用改；想換顏色改最上面 :root 的色碼）
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+/* [CSS-1] 全站設計系統 */
+:root{--ink:#262626;--muted:#8e8e8e;--line:#dbdbdb;--paper:#fff;--bg:#f5f5f5;--blue:#0095f6;--pink:#d62976;--soft:#fafafa;--red:#ff3040;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",Arial,sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#app{width:100%;max-width:480px;min-height:100dvh;margin:0 auto;background:#fff;position:relative;box-shadow:0 0 28px #0000000b;padding-bottom:calc(58px + var(--safe))}
+.page{display:none;min-height:calc(100dvh - 116px)}.page.active{display:block}
+.hide{display:none!important}
+
+/* [CSS-2] 頂部列與限時動態圓圈 */
+.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid #efefef;position:sticky;top:0;background:#ffffffed;backdrop-filter:blur(14px);z-index:20}
+.brand{font:700 27px Georgia,serif;letter-spacing:-1px}.top-actions{display:flex;gap:18px;align-items:center}.iconbtn{border:0;background:none;padding:3px;font-size:25px;position:relative;color:var(--ink)}.iconbtn small{position:absolute;top:-3px;right:-6px;background:var(--red);color:#fff;border-radius:20px;font:700 10px Arial;padding:2px 5px}
+.stories{display:flex;gap:13px;padding:13px 12px 14px;overflow-x:auto;border-bottom:1px solid #efefef;scrollbar-width:none}.stories::-webkit-scrollbar{display:none}
+.story{border:0;background:none;padding:0;width:66px;flex:0 0 66px;text-align:center;font-size:11px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ring{width:62px;height:62px;border-radius:50%;padding:2.5px;margin:0 auto 5px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf)}.ring.seen{background:#c7c7c7}.ring span{width:100%;height:100%;display:grid;place-items:center;border:2px solid white;border-radius:50%;font-size:25px;background:linear-gradient(135deg,#f4d9c6,#b9c9dc);overflow:hidden}
+
+/* [CSS-3] 頭像與圖片通用規則（圖片一律填滿、裁切置中） */
+.avatar{width:35px;height:35px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-size:19px;background:linear-gradient(135deg,#f2d0bc,#c5d6e5);border:1px solid #eee;overflow:hidden}
+.avatar img,.ring span img,.profile-avatar img,.nav-avatar img,.bubble img{width:100%;height:100%;object-fit:cover;display:block}
+.tile img,.tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* [CSS-4] 貼文 */
+.post{border-bottom:1px solid #eee;padding-bottom:12px}.post-head{height:54px;padding:0 12px;display:flex;align-items:center;gap:9px}.userline{font-size:13px;font-weight:650;flex:1}.subline{font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}.verified{color:#3897f0}.more{border:0;background:none;font-size:21px;padding:5px 8px}
+.photo{aspect-ratio:1/1;width:100%;position:relative;overflow:hidden;display:grid;place-items:center}
+.photo .photo-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.photo.has-img .scene-label,.photo.has-img .photo-caption{display:none}
+.photo.has-img:before,.photo.has-img:after{display:none!important}
+.photo.school{background:linear-gradient(180deg,#a9d5ec 0 43%,#91b38d 43% 57%,#d9c8a9 57%)}.photo.school:before{content:"";position:absolute;left:14%;right:14%;bottom:17%;height:43%;background:linear-gradient(90deg,#e7d8c3 0 30%,#b5c3c5 30% 70%,#e7d8c3 70%);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%)}.photo.school:after{content:"";position:absolute;bottom:16%;left:43%;width:14%;height:24%;background:#7b9caa;border:5px solid #f4eee4}
+.photo.court{background:linear-gradient(135deg,#d9e7e7,#a7c3c4 48%,#c8a984 49%,#b98560)}.photo.court:before{content:"";position:absolute;inset:13% 8%;border:5px solid #fff9;border-radius:3px;background:linear-gradient(90deg,transparent 49%,#fff9 49% 51%,transparent 51%),linear-gradient(0deg,transparent 49%,#fff9 49% 51%,transparent 51%)}.photo.drink{background:linear-gradient(145deg,#f7dce0,#f6c6a9 55%,#c6d3bd)}.photo.drink:before{content:"";position:absolute;width:31%;height:48%;bottom:18%;left:34%;border-radius:12px 12px 25px 25px;background:linear-gradient(90deg,#e7a7a9,#fff0d4 55%,#d58c98);border:4px solid #fff9;transform:rotate(-7deg);box-shadow:18px 8px 0 -3px #ffffff80}.photo.friends{background:linear-gradient(135deg,#f1d7c8,#b8d1c9 55%,#d8c4e4)}.photo.friends:before{content:"";position:absolute;width:36%;height:53%;left:17%;bottom:12%;border-radius:48% 48% 20% 20%;background:#c88c78;box-shadow:100px 0 0 #8b9ab7}.photo.park{background:linear-gradient(180deg,#f4b37d,#e9c0a0 50%,#607c78)}.photo.park:before{content:"";position:absolute;bottom:0;left:0;right:0;height:43%;background:linear-gradient(160deg,transparent 0 35%,#506b5a 36%);clip-path:polygon(0 40%,20% 10%,42% 55%,65% 15%,100% 42%,100% 100%,0 100%)}.photo.study{background:linear-gradient(135deg,#d9d5eb,#f2d8ca)}.photo.study:before{content:"";position:absolute;left:14%;right:14%;bottom:15%;height:38%;background:#c79d78;border-radius:5px;box-shadow:0 -95px 0 -28px #fff9}.photo.cat{background:linear-gradient(135deg,#e7dac8,#c5d8d2)}.photo.cat:before{content:"";position:absolute;width:42%;height:40%;border-radius:48% 48% 42% 42%;background:#b8a18e;bottom:20%;left:29%;box-shadow:0 -58px 0 -18px #c6b09d}
+.scene-label{position:relative;z-index:2;font-size:72px;filter:drop-shadow(0 4px 3px #0002)}.photo-caption{position:absolute;bottom:12px;left:12px;color:white;background:#0008;border-radius:20px;padding:6px 10px;font-size:12px;z-index:3}.location{position:absolute;top:12px;left:12px;background:#ffffffdf;border-radius:18px;padding:5px 9px;font-size:11px;z-index:3}
+.post-actions{display:flex;gap:15px;align-items:center;padding:8px 12px 3px}.post-actions button{border:0;background:none;padding:0;font-size:25px}.post-actions .save{margin-left:auto}.likes,.caption,.comments-link,.timestamp{padding:0 12px;margin:3px 0;font-size:13px}.likes{font-weight:650}.caption{line-height:1.5}.comments-link{color:var(--muted)}.timestamp{font-size:10px;color:var(--muted);letter-spacing:.2px}
+
+/* [CSS-5] 底部導覽列 */
+.bottomnav{height:58px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#ffffffed;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;z-index:25;padding-bottom:var(--safe)}.bottomnav button{border:0;background:none;font-size:24px;width:20%;height:52px;position:relative}.bottomnav button.active{font-weight:900}.nav-avatar{width:25px;height:25px;border-radius:50%;display:inline-grid;place-items:center;background:#e5c2b1;border:1.5px solid #333;font-size:15px;overflow:hidden}
+.navdot{position:absolute;top:9px;left:calc(50% + 6px);width:9px;height:9px;border-radius:50%;background:var(--red);border:1.5px solid #fff}
+
+/* [CSS-6] 搜尋、探索格、列表 */
+.section-head{height:49px;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid #eee}.section-head h2{font-size:16px;margin:0;flex:1}.back{border:0;background:none;font-size:25px}.searchbox{margin:12px 14px;background:#efefef;border-radius:10px;padding:10px 13px;display:flex;gap:8px;color:#888}.searchbox input{border:0;background:transparent;outline:0;width:100%;font-size:14px}
+.explore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}.tile{aspect-ratio:1;position:relative;display:grid;place-items:center;font-size:48px;overflow:hidden;border:0}.tile:nth-child(6n+1){background:linear-gradient(140deg,#d2b8a5,#8da6a0)}.tile:nth-child(6n+2){background:linear-gradient(140deg,#edc1a8,#b7c6dc)}.tile:nth-child(6n+3){background:linear-gradient(140deg,#d8c7e7,#e8c8a7)}.tile:nth-child(6n+4){background:linear-gradient(140deg,#b8d2c0,#d9d0a6)}.tile:nth-child(6n+5){background:linear-gradient(140deg,#edb9b8,#c4b4d8)}.tile:nth-child(6n){background:linear-gradient(140deg,#b3c9d8,#e7c9a5)}
+.result-row,.dm-row{display:flex;gap:12px;align-items:center;padding:11px 14px;border:0;border-bottom:1px solid #f1f1f1;background:white;width:100%;text-align:left}.result-row .avatar,.dm-row .avatar{width:46px;height:46px;font-size:22px}.result-meta{flex:1}.result-meta b,.dm-text b{font-size:13px}.result-meta small,.dm-text p{display:block;color:var(--muted);font-size:12px;margin:3px 0 0}
+.dm-row.unread .dm-text p{color:var(--ink);font-weight:650}.unread-dot{color:var(--red);font-size:14px}
+
+/* [CSS-7] Reels：上下滑動 */
+.reels-wrap{height:calc(100dvh - 116px);min-height:520px;overflow:hidden;position:relative;background:#202020;touch-action:none;user-select:none;-webkit-user-select:none}
+.reels-track{height:100%;transition:transform .38s cubic-bezier(.3,.7,.2,1)}
+.reel{height:calc(100dvh - 116px);min-height:520px;background:#202020;color:white;position:relative;overflow:hidden;display:grid;place-items:center}
+.reel-art{position:absolute;inset:0;display:grid;place-items:center;font-size:130px;background:linear-gradient(155deg,#e9a77f,#a7b9c1 50%,#5e737d)}.reel-art.alt{background:linear-gradient(155deg,#d6b7e6,#e7b78c 55%,#667d78)}
+.reel-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.reel-shade{position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(transparent,#0009);pointer-events:none}
+.reel-copy{position:absolute;left:15px;right:75px;bottom:24px;text-shadow:0 1px 5px #000;z-index:2;display:flex;flex-direction:column;gap:4px}
+.reel-user{display:flex;align-items:center;gap:8px;font-weight:700}.reel-user .avatar{width:32px;height:32px;border:1.5px solid #fff}
+.reel-side{position:absolute;right:12px;bottom:70px;display:grid;gap:22px;text-align:center;z-index:2}.reel-side button{background:none;border:0;color:white;font-size:25px;text-shadow:0 1px 4px #0008}.reel-side span{display:block;font-size:11px}
+.reel-counter{position:absolute;top:12px;right:14px;z-index:5;background:#0007;color:#fff;font-size:12px;padding:4px 10px;border-radius:14px}
+.reel-swipe-hint{position:absolute;left:0;right:0;bottom:14px;z-index:6;text-align:center;color:#fff;font-size:12px;text-shadow:0 1px 4px #000;pointer-events:none;animation:bounce 1.4s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(-9px);opacity:1}}
+
+/* [CSS-8] 個人檔案 */
+.profile{padding:16px 14px}.profile-top{display:flex;gap:22px;align-items:center}.profile-avatar{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;font-size:44px;background:linear-gradient(135deg,#eac2a9,#c1cce3);border:1px solid #eee;overflow:hidden}.stats{display:flex;justify-content:space-around;flex:1;text-align:center}.stats b{display:block;font-size:17px}.stats span{font-size:12px}.profile-name{font-size:13px;font-weight:650;margin-top:12px}.bio{font-size:13px;line-height:1.55;margin-top:4px}.profile-buttons{display:flex;gap:7px;margin-top:13px}.profile-buttons button{flex:1;border:0;border-radius:7px;background:#efefef;padding:8px;font-weight:650;font-size:12px}.highlights{display:flex;gap:17px;padding:16px 12px;overflow-x:auto}.highlight{border:0;background:none;text-align:center;font-size:11px;white-space:nowrap}.bubble{width:62px;height:62px;border:1px solid #ddd;border-radius:50%;display:grid;place-items:center;font-size:27px;margin-bottom:5px;background:#f4e9df;overflow:hidden}.profile-tabs{display:flex;border-top:1px solid var(--line);height:45px;justify-content:space-around}.profile-tabs button{border:0;background:none;font-size:20px;width:33%;color:var(--muted)}.profile-tabs button.selected{color:var(--ink);border-top:1px solid var(--ink);margin-top:-1px}
+
+/* [CSS-9] 私訊 */
+.dm-text{flex:1}.chat{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:48vh}.bubble-chat{max-width:80%;padding:10px 13px;border-radius:18px;background:#efefef;font-size:13px;line-height:1.45;align-self:flex-start;animation:pop .25s ease}.bubble-chat.mine{background:#3797f0;color:white;align-self:flex-end}.chat-date{text-align:center;color:#999;font-size:10px;margin:5px}
+.chat-hint{text-align:center;font-size:12px;color:#0095f6;padding:10px 14px;animation:pulse 1.6s infinite;font-weight:650}.chat-hint.done{animation:none;color:#4a8f5a}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+.notice{background:#fff8e7;padding:10px 14px;font-size:11px;color:#765b2c;line-height:1.5;border-bottom:1px solid #f0e3c6}
+
+/* [CSS-10] 彈出視窗：貼文詳情、限時動態、調查筆記、選單 */
+.overlay{position:fixed;inset:0;background:#0008;z-index:60;display:none;align-items:flex-end;justify-content:center}.overlay.show{display:flex}.modal{background:#fff;width:100%;max-width:480px;max-height:94dvh;overflow:auto;border-radius:14px 14px 0 0;position:relative}.modal-head{height:48px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);font-weight:650;font-size:14px;position:sticky;top:0;background:white;z-index:3}.close{position:absolute;right:14px;top:7px;border:0;background:none;font-size:25px}.comment{padding:9px 14px;font-size:13px;line-height:1.45}.comment b{margin-right:5px}.comment-form{position:sticky;bottom:0;background:white;border-top:1px solid var(--line);padding:12px;display:flex;gap:10px}.comment-form input{border:0;outline:0;flex:1}.comment-form button{border:0;background:none;color:var(--blue);font-weight:650}
+.story-stage{width:100%;height:100%;display:grid;place-items:center;padding:24px;text-align:center;font-size:20px;line-height:1.7}
+.story-stage.withimg{display:block;padding:0;position:relative;background:#222}
+.story-stage .story-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.story-stage.withimg .story-text{position:absolute;left:0;right:0;bottom:0;padding:70px 22px 22px;color:#fff;text-shadow:0 1px 6px #000a;background:linear-gradient(transparent,#0008)}
+.story-zones{position:absolute;inset:0;display:flex;z-index:2}.story-zones div{height:100%;cursor:pointer;-webkit-tap-highlight-color:transparent}.story-zones .zl{width:35%}.story-zones .zr{width:65%}
+
+/* [CSS-11] 調查筆記 */
+.case-fab{position:fixed;right:max(14px,calc((100vw - 480px)/2 + 14px));bottom:75px;z-index:30;border:0;border-radius:50%;width:53px;height:53px;background:linear-gradient(45deg,#feda75,#d62976,#962fbf);color:white;font-size:23px;box-shadow:0 4px 14px #0003}.case-fab em{position:absolute;right:-3px;top:-3px;background:#262626;color:white;border-radius:20px;font:700 10px Arial;padding:3px 6px}
+.case-wrap{padding:15px}.case-intro{font-size:13px;line-height:1.6;color:#555;margin:0 0 13px}.progress{height:6px;background:#eee;border-radius:10px;overflow:hidden;margin:10px 0 15px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#feda75,#d62976);width:0;transition:width .3s}.clue{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #eee;font-size:13px}.clue .num{width:26px;height:26px;border-radius:50%;background:#f3e7f1;display:grid;place-items:center;flex:0 0 auto}.clue small{display:block;color:#999;margin-top:4px}.empty{text-align:center;color:#999;padding:25px 10px;font-size:13px}.mission{background:#f8f8f8;border-radius:12px;padding:13px;margin:12px 0;font-size:13px;line-height:1.6}.mission h3{margin:0 0 6px;font-size:14px}.field{margin:12px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}.field textarea{width:100%;min-height:75px;border:1px solid #ddd;border-radius:9px;padding:10px;resize:vertical;font-size:13px}.primary{border:0;background:#0095f6;color:white;border-radius:8px;padding:10px 15px;font-weight:650}.secondary{border:1px solid #ddd;background:#fff;border-radius:8px;padding:9px 13px;font-size:12px}.menu-option{width:100%;padding:16px;border:0;border-bottom:1px solid #eee;background:white;text-align:center;font-size:14px}.menu-option.blue{color:#0095f6;font-weight:700}.toast{position:fixed;z-index:100;bottom:145px;left:50%;transform:translate(-50%,10px);background:#262626;color:white;border-radius:24px;padding:10px 15px;font-size:12px;opacity:0;transition:.2s;pointer-events:none;max-width:90%;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}.hint{font-size:11px;color:#888;line-height:1.5;padding:10px 14px}
+/* [CSS-12] 偵查點、筆記說明 */
+.inspectable{cursor:pointer;outline:1px dashed #0095f66b;outline-offset:2px;border-radius:6px;transition:outline-color .15s}
+.inspectable.hit{outline:2px solid #ff3040}.inspectable.safe{outline:2px solid #4a8f5a}
+.photo.inspectable{border-radius:0;outline-offset:-4px}.avatar.inspectable,.profile-avatar.inspectable{border-radius:50%}.location.inspectable{border-radius:18px}
+.caption.inspectable{margin:3px 8px;padding:3px 6px}.comment.inspectable{margin:2px 8px;padding:7px 8px}
+.inspect-bar{background:#eef6ff;color:#1c5d99;font-size:12px;line-height:1.5;padding:9px 14px}
+.insp-box{padding:18px 18px 24px;font-size:13px;line-height:1.65}.insp-title{font-size:16px;font-weight:700;margin-bottom:4px}.insp-src{color:#888;font-size:12px;margin-bottom:8px;word-break:break-all}.insp-box p{margin:6px 0}
+.why summary{font-size:12px;color:#0095f6;margin-top:7px;cursor:pointer}.whybox{background:#fafafa;border-radius:8px;padding:8px 10px;margin-top:6px;font-size:12px;line-height:1.6}.whybox p{margin:5px 0}
+.sec-title{font-size:13px;font-weight:700;margin:16px 0 8px}
+.combo{background:#fff4f6;border-left:3px solid #d62976;border-radius:6px;padding:9px 11px;margin:6px 0;font-size:12px;line-height:1.6}
+.wrong{background:#f3faf4;border-left:3px solid #4a8f5a;border-radius:6px;padding:9px 11px;margin:6px 0;font-size:12px;line-height:1.6}.wrong b{display:block;margin-bottom:2px}
+.newtag{background:#ff3040;color:#fff;border-radius:8px;font-size:10px;padding:1px 6px;margin-left:6px}
+.selfchk{display:block;font-size:12px;margin:6px 0}
+/* [CSS-13] 影片與 Reels 暫停圖示 */
+.photo video.photo-img,.story-stage video.story-img{background:#000}
+.reel-pause{position:absolute;inset:0;display:none;place-items:center;font-size:72px;color:#fff;text-shadow:0 2px 12px #0009;pointer-events:none;z-index:3}.reel.paused .reel-pause{display:grid}
+/* [CSS-14] SVG 圖標（底部導覽、貼文操作列、私訊按鈕） */
+.bottomnav button{display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.bottomnav button svg,.post-actions svg,.iconbtn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+.bottomnav button.active svg{stroke-width:2.4}.bottomnav button.active svg .fl{fill:currentColor}
+.post-actions button{color:var(--ink);display:flex;align-items:center}
+.post-actions button.liked{color:#ed4956}.post-actions button.liked svg{fill:#ed4956}
+.post-actions button.saved svg{fill:currentColor}
+.iconbtn svg{width:26px;height:26px}
+@media(min-width:700px){body{background:#f0f0f0}#app{border-left:1px solid #eee;border-right:1px solid #eee}.bottomnav{border-left:1px solid #eee;border-right:1px solid #eee}}
+</style>
+</head>
+
+<body>
+<!-- ═══════════════════════════════════════════════════════════════
+     🧱 頁面骨架區（HTML 結構，內容由上方資料自動產生，一般不用改）
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="app">
+  <!-- [頁面 1] 頂部列 -->
+  <header class="topbar"><div class="brand" id="brandName">IN-Circle</div><div class="top-actions"><button class="iconbtn" aria-label="私訊" onclick="showPage('dm')"><svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.8 10.4l7.3 2.9 2.9 7.3z"/><path d="M10.1 13.3 21.5 3.5"/></svg><small id="dmBadge">3</small></button></div></header>
+
+  <!-- [頁面 2] 首頁：限動圓圈 + 貼文流 -->
+  <main id="home" class="page active">
+    <div class="stories" id="storiesBar"></div>
+    <div id="feed"></div>
+  </main>
+
+  <!-- [頁面 3] 搜尋探索 -->
+  <section id="explore" class="page">
+    <div class="searchbox">⌕ <input id="searchInput" placeholder="搜尋帳號、地點、關鍵字" oninput="searchExplore(this.value)"></div>
+    <div id="searchResults"></div>
+    <div class="hint">探索頁會混合顯示貼文與帳號。試著搜尋「光明」、「排球」、「樂喝」或「公園」。</div>
+    <div class="explore-grid" id="exploreGrid"></div>
+  </section>
+
+  <!-- [頁面 4] Reels：上下滑動 -->
+  <section id="reels" class="page">
+    <div class="reels-wrap" id="reelsWrap">
+      <div class="reel-counter" id="reelCounter">1 / 1</div>
+      <div class="reels-track" id="reelsTrack"></div>
+      <div class="reel-swipe-hint" id="reelHint">︽<br>往上滑，看下一則</div>
+    </div>
+  </section>
+
+  <!-- [頁面 5] 通知 -->
+  <section id="activity" class="page"><div class="section-head"><h2>通知</h2></div><div class="notice">以下帳號、人物與訊息皆為教學用虛構情境，請勿將內容對應到真實同學。</div><div id="activityList"></div></section>
+
+  <!-- [頁面 6] 個人檔案 -->
+  <section id="profile" class="page">
+    <div class="section-head"><h2 id="profileTitle">yuyu.lin ⌄</h2><button class="iconbtn" onclick="toast('此為教學模擬設定')">☰</button></div>
+    <div class="profile"><div class="profile-top"><div class="profile-avatar inspectable" id="profileAvatar" onclick="inspect(this,'profile','avatar')"></div><div class="stats"><div><b id="postCount">0</b><span>貼文</span></div><div><b id="followers">0</b><span>粉絲</span></div><div><b id="following">0</b><span>追蹤中</span></div></div></div><div class="profile-name inspectable" id="profileName" onclick="inspect(this,'profile','name')" style="display:inline-block"></div><div class="bio inspectable" id="profileBio" onclick="inspect(this,'profile','bio')"></div><div class="profile-buttons"><button onclick="toast('此為虛構帳號，無法實際追蹤')">追蹤中</button><button onclick="showPage('dm')">訊息</button></div><div class="hint" style="padding:10px 0 0">🔍 偵探提示：點點看<b>頭像、名稱、簡介</b>，再到下方<b>點開每一篇貼文</b>，找出真正有風險的地方。</div></div>
+    <div class="highlights" id="highlights"></div>
+    <div class="profile-tabs"><button class="selected" onclick="profileTab(this,'posts')">▦</button><button onclick="profileTab(this,'reels')">▣</button><button onclick="profileTab(this,'tagged')">♙</button></div><div class="explore-grid" id="profileGrid"></div>
+  </section>
+
+  <!-- [頁面 7] 私訊匣與對話頁 -->
+  <section id="dm" class="page"><div class="section-head"><h2>訊息</h2><button class="iconbtn" onclick="toast('新增訊息為模擬功能')">＋</button></div><div class="searchbox">⌕ 搜尋訊息</div><div id="dmList"></div></section>
+  <section id="chat" class="page" onclick="nextMsg()"><div class="section-head"><button class="back" onclick="event.stopPropagation();showPage('dm')">‹</button><h2 id="chatName">對話</h2></div><div id="chatBody" class="chat"></div><div id="chatHint" class="chat-hint"></div><div id="chatClueWrap" class="hide" style="padding:6px 14px 24px"><button class="secondary" style="width:100%" onclick="event.stopPropagation();addChatClue()">＋ 將這段對話加入調查筆記</button></div></section>
+
+  <!-- [導覽列] 首頁、搜尋、Reels、通知、個人檔案 -->
+  <nav class="bottomnav" aria-label="主要導覽"><button class="active" data-page="home" onclick="showPage('home',this)" aria-label="首頁"><svg viewBox="0 0 24 24"><path class="fl" d="M4 10.2 12 3.5l8 6.7V19a1.5 1.5 0 0 1-1.5 1.5H15v-5.5H9v5.5H5.5A1.5 1.5 0 0 1 4 19z"/></svg></button><button data-page="explore" onclick="showPage('explore',this)" aria-label="搜尋探索"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M16 16l5 5"/></svg></button><button data-page="reels" onclick="showPage('reels',this)" aria-label="Reels"><svg viewBox="0 0 24 24"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><path class="fl" d="M10 8.4v7.2l5.8-3.6z"/></svg></button><button data-page="activity" onclick="showPage('activity',this)" aria-label="通知"><svg viewBox="0 0 24 24"><path class="fl" d="M12 20.3S3.6 15.2 3.6 9.3a4.6 4.6 0 0 1 8.4-2.6 4.6 4.6 0 0 1 8.4 2.6c0 5.9-8.4 11-8.4 11z"/></svg><i class="navdot" id="actDot"></i></button><button data-page="profile" onclick="showPage('profile',this)" aria-label="個人檔案"><span class="nav-avatar" id="navAvatar"></span></button></nav>
+  <button class="case-fab" onclick="openCase()" aria-label="開啟調查筆記">🗂️<em id="clueCount">0</em></button>
+</div>
+
+<!-- [彈出 A] 限時動態檢視器：點右側下一張、點左側上一張 -->
+<div class="overlay" id="storyOverlay" onclick="closeOverlay(event,'storyOverlay')"><div class="modal" style="height:92dvh;background:linear-gradient(155deg,#f6b4a4,#f3d2a4 55%,#9db8b0);display:flex;flex-direction:column;border-radius:14px;overflow:hidden" onclick="event.stopPropagation()"><div class="modal-head" style="background:transparent;border:0"><span id="storyUser">yuyu.lin</span><button class="close" onclick="hide('storyOverlay')">×</button></div><div id="storyBars" style="display:flex;gap:4px;padding:8px 14px"></div><div style="flex:1;position:relative;display:flex;min-height:0"><div id="storyContent" style="flex:1;position:relative;overflow:hidden"></div><div class="story-zones"><div class="zl" onclick="storyPrev()"></div><div class="zr" onclick="storyNext()"></div></div></div><div style="text-align:center;padding:14px;font-size:12px">點畫面右側看下一則，點左側回上一則<br><button class="secondary" style="margin-top:10px;background:#ffffff88" onclick="addStoryClue()">＋ 加入調查筆記</button></div></div></div>
+
+<!-- [彈出 B] 貼文詳情 -->
+<div class="overlay" id="postOverlay" onclick="closeOverlay(event,'postOverlay')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head">貼文<button class="close" onclick="hide('postOverlay')">×</button></div><div id="postDetail"></div><div id="postComments"></div><div class="comment-form"><span>☺</span><input placeholder="新增留言……" id="commentInput"><button onclick="sendComment()">發布</button></div></div></div>
+
+<!-- [彈出 B2] 偵查結果 -->
+<div class="overlay" id="inspectOverlay" style="z-index:70" onclick="closeOverlay(event,'inspectOverlay')"><div class="modal" onclick="event.stopPropagation()"><div class="insp-box" id="inspectBody"></div></div></div>
+
+<!-- [彈出 C] 調查筆記與結案任務（線索 100% 後才顯示結案任務） -->
+<div class="overlay" id="caseOverlay" onclick="closeOverlay(event,'caseOverlay')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head">調查筆記<button class="close" onclick="hide('caseOverlay')">×</button></div><div class="case-wrap">
+<p class="case-intro">你正在檢視一個虛構的社群帳號。請點開貼文、個人檔案、限時動態與私訊，找出<b>真正有風險的地方</b>——可能是照片、定位、貼文文字，甚至是別人的留言。不是每個地方都有問題；重要的是觀察資訊如何被組合、轉傳或重新利用。有些新的通知與訊息，會在你調查到某些線索後才出現。</p>
+<div style="font-size:12px;font-weight:700">調查進度：<span id="progressText">0%</span></div><div class="progress"><span id="progressBar"></span></div><div id="clueList"><div class="empty">還沒有記錄線索。回到社群平台開始探索吧！</div></div>
+<div id="comboWrap" class="hide"><div class="sec-title">🧩 拼圖推論：資訊組合起來更危險</div><div id="comboList"></div></div>
+<div id="wrongWrap" class="hide"><div class="sec-title">🤔 我判斷過、但不是主要風險的地方</div><div id="wrongList"></div></div>
+<div id="lockHint" class="mission" style="color:#888">🔒 還有線索沒找到。留意新的通知與訊息，進度到 100% 後結案任務就會出現。</div>
+<div id="finalTask" class="hide">
+<div class="mission"><h3>🕵️ 結案任務</h3>你已經找齊所有線索了！試著回答：這些資訊可能讓陌生人推測出什麼？哪些資訊原本分散在不同地方，組合後才變得清楚？</div>
+<div class="field"><label for="inference">一、我推測這個帳號可能透露了哪些個人資訊？</label><textarea id="inference" placeholder="例如：就讀環境、固定活動、常去地點……"></textarea></div>
+<div class="field"><label for="risk">二、你認為最需要留意的數位足跡是什麼？為什麼？</label><textarea id="risk" placeholder="請寫下你的判斷與理由。"></textarea></div>
+<div class="field"><label for="advice">三、如果你是語澄的朋友，你會給她什麼建議？</label><textarea id="advice" placeholder="例如：調整公開範圍、發文前檢查定位與標註……"></textarea></div>
+<button class="primary" onclick="submitCase()">完成我的調查紀錄</button> <button class="secondary" onclick="clearCaseAnswers()">清除文字</button>
+<div id="caseFeedback" class="mission hide"></div>
+</div>
+</div></div></div>
+
+<!-- [彈出 D] 貼文更多選單 -->
+<div class="overlay" id="menuOverlay" onclick="closeOverlay(event,'menuOverlay')"><div class="modal" style="border-radius:14px;margin:12px" onclick="event.stopPropagation()"><div id="menuItems"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ⚙ 程式邏輯區（不用動；要改內容請回到最上面的「★ 可編輯區」）
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+const $=s=>document.querySelector(s);
+/* 貼文操作列圖標（愛心、留言對話框、分享紙飛機、收藏） */
+const ACTIONS=(open)=>`<button onclick="like(this)" aria-label="讚"><svg viewBox="0 0 24 24"><path d="M12 20.3S3.6 15.2 3.6 9.3a4.6 4.6 0 0 1 8.4-2.6 4.6 4.6 0 0 1 8.4 2.6c0 5.9-8.4 11-8.4 11z"/></svg></button><button ${open} aria-label="留言"><svg viewBox="0 0 24 24"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.3 7.6L3.5 20.5l1.4-4.6A8.5 8.5 0 1 1 20.5 11.5z"/></svg></button><button onclick="toast('已複製貼文連結（模擬）')" aria-label="分享"><svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.8 10.4l7.3 2.9 2.9 7.3z"/><path d="M10.1 13.3 21.5 3.5"/></svg></button><button class="save" onclick="savePost(this)" aria-label="收藏"><svg viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.5-6 4.5z"/></svg></button>`;
+
+/* ── 圖片小工具：有路徑就放圖，載入失敗自動改回表情符號 ── */
+function imgOr(src,fallback,cls){return mediaHTML(src,{fb:fallback,cls:cls,mode:'img'})}
+function acc(user){return ACCOUNTS[user]||{label:user,emoji:'👤',avatar:''}}
+function av(user){const a=acc(user);return imgOr(avatarSrc(user),a.emoji)}
+function postById(id){return posts.find(x=>x.id===id)||posts[0]}
+function thumb(id){const p=postById(id);return mediaHTML(postSrc(p),{fb:p.art,v:'tile'})}
+/* ── 媒體載入系統：頭像／貼文／限動／Reels／精選封面共用 ──
+   路徑可寫完整檔名（最快）、不寫副檔名（自動依序嘗試 jpg、jpeg、png、webp、gif、mp4、webm、mov）、或留空（顯示表情符號） */
+const IMG_EXTS=['jpg','jpeg','png','webp','gif'],VID_EXTS=['mp4','webm','mov'],mediaCache={};
+function hasExt(s){return /\.(jpe?g|png|webp|gif|avif|svg|mp4|webm|mov|m4v)([?#].*)?$/i.test(s||'')}
+function isVideo(src){return /\.(mp4|webm|mov|m4v)([?#].*)?$/i.test(src||'')}
+function mediaList(base,mode){if(hasExt(base))return [base];const i=IMG_EXTS.map(e=>base+'.'+e),v=VID_EXTS.map(e=>base+'.'+e);return mode==='img'?i:mode==='vid'?v.concat(i):i.concat(v)}
+function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function hasMedia(src){return !!src&&mediaCache[src]!==null}
+/* o.cls 樣式；o.fb 失敗時顯示的文字（表情符號）；o.mode 'img' 只找圖片／'vid' 先找影片；o.v 影片用途 tile（縮圖）/feed（貼文）/story/reel */
+function mediaHTML(base,o){o=o||{};if(!hasMedia(base))return o.fb||'';return mediaTag(mediaCache[base]||mediaList(base,o.mode)[0],base,o)}
+function mediaTag(cur,base,o){const v=o.v||'',d=`data-base="${esc(base)}" data-cur="${esc(cur)}" data-fb="${esc(o.fb)}" data-v="${v}" data-mode="${o.mode||''}"`,cls=o.cls?` class="${o.cls}"`:'',ev='onerror="mediaNext(this)" onload="mediaOk(this)" onloadeddata="mediaOk(this)"';
+ if(!isVideo(cur))return `<img${cls} ${d} ${ev} src="${esc(cur)}" alt="">`;
+ return `<video${cls} ${d} ${ev} src="${esc(cur)}${v==='tile'?'#t=0.1':''}" muted loop playsinline ${v==='tile'||v==='reel'?'preload="metadata"':'autoplay'}></video>`}
+function mediaOk(el){mediaCache[el.dataset.base]=el.dataset.cur;if(el.tagName==='VIDEO'){el.muted=el.dataset.v!=='reel'||reelMuted;if(el.dataset.v==='reel')syncReelVideo()}}
+function mediaNext(el){const base=el.dataset.base,list=mediaList(base,el.dataset.mode),i=list.indexOf(el.dataset.cur)+1;if(i<=0||i>=list.length){mediaFail(el);return}
+ const t=document.createElement('div');t.innerHTML=mediaTag(list[i],base,{cls:el.className,fb:el.dataset.fb,v:el.dataset.v,mode:el.dataset.mode});const ne=t.firstChild;el.replaceWith(ne);if(ne.tagName==='VIDEO')ne.muted=true}
+function mediaFail(el){mediaCache[el.dataset.base]=null;const p=el.parentNode;if(p&&p.classList)p.classList.remove('has-img','withimg');const fb=el.dataset.fb;if(fb)el.replaceWith(document.createTextNode(fb));else el.remove()}
+/* 沒寫路徑時的預設檔名（直接把檔案放進對應資料夾即可） */
+function avatarSrc(user){const a=ACCOUNTS[user];return a&&a.avatar!==undefined?a.avatar:'images/avatars/'+user}
+function postSrc(p){return p.img!==undefined?p.img:'images/posts/'+p.id}
+function slideSrc(key,i,s){return s.img!==undefined?s.img:'images/stories/'+key+'_'+(i+1)}
+function reelSrc(r,i){return r.media!==undefined?r.media:'images/reels/reel_'+(i+1)}
+
+/* ── 狀態 ── */
+let clues=[],currentPost='school',currentMenuPost='school',currentChat='ting',storyKey='yuyu',storyIdx=0,reelIdx=0;
+const clueSrc={},foundSpots={},wrongSpots={};
+const unread={},chatShown={},chatOpen={},actOn={};let dmOrder=[];
+Object.keys(chats).forEach(k=>{chatShown[k]=0;chatOpen[k]=!chats[k].need;unread[k]=chatOpen[k];if(chatOpen[k])dmOrder.push(k)});
+const AREA={photo:'照片',place:'定位',caption:'貼文文字',comment:'留言',avatar:'頭像',name:'名稱',bio:'簡介'};
+
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('on'),2100)}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('#'+id).classList.add('active');document.querySelectorAll('.bottomnav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');else{let n=document.querySelector(`[data-page="${id}"]`);if(n)n.classList.add('active')}if(id==='activity')$('#actDot').classList.add('hide');if(id==='dm')renderDM();syncReelVideo();window.scrollTo(0,0)}
+function hide(id){$('#'+id).classList.remove('show');if(id==='storyOverlay')$('#storyContent').innerHTML='';if(id==='postOverlay')$('#postDetail').innerHTML=''}function closeOverlay(e,id){if(e.target.id===id)hide(id)}
+
+/* ── 線索與結案任務 ── */
+function pct(){return Math.min(100,clues.reduce((t,id)=>t+clueData[id].pts,0))}
+function allClues(){return Object.keys(clueData).every(id=>clues.includes(id))}
+function addClue(id,src,quiet){if(!clueData[id])return 0;if(clues.includes(id)){if(!quiet)toast('這條線索已經記錄過了');return 0}clues.push(id);clueSrc[id]=src||clueData[id].source;renderClues();checkUnlocks();if(!quiet)toast(allClues()?'🎉 調查進度 100%！到調查筆記完成結案任務':'已加入筆記，調查進度 +'+clueData[id].pts+'%');return clueData[id].pts}
+/* 蒐集到指定線索後，解鎖新的私訊與通知 */
+function checkUnlocks(){let nm=false,na=false;
+ Object.keys(chats).forEach(k=>{const c=chats[k];if(!chatOpen[k]&&c.need.every(n=>clues.includes(n))){chatOpen[k]=true;unread[k]=true;dmOrder.unshift(k);nm=true}});
+ ACTIVITY_LOCKED.forEach((a,i)=>{if(!actOn[i]&&a.need.every(n=>clues.includes(n))){actOn[i]=true;na=true}});
+ if(nm)renderDM();if(na){renderActivity();$('#actDot').classList.remove('hide')}
+ if(nm||na)setTimeout(()=>toast(nm?'💬 你收到了新的私訊，去訊息匣看看':'🔔 有新的通知，去看看'),2000)}
+function renderClues(){const done=allClues(),p=pct();$('#progressText').textContent=p+'%';$('#progressBar').style.width=p+'%';$('#clueCount').textContent=p+'%';$('#finalTask').classList.toggle('hide',!done);$('#lockHint').classList.toggle('hide',done);
+ $('#clueList').innerHTML=clues.length?clues.map((id,i)=>{const c=clueData[id];return `<div class="clue"><span class="num">${i+1}</span><div style="flex:1;min-width:0"><b>${c.title}</b><div style="color:#777;margin-top:3px">${c.detail}</div><small>${c.type}｜你在這裡發現：${clueSrc[id]}</small><details class="why"><summary>為什麼這是問題？可能會發生什麼？</summary><div class="whybox"><p><b>為什麼有風險：</b>${c.why}</p><p><b>可能的危險：</b>${c.danger}</p><p><b>更安全的做法：</b>${c.tip}</p></div></details></div><button class="secondary" onclick="removeClue('${id}')">移除</button></div>`}).join(''):'<div class="empty">還沒有記錄線索。回到社群平台，點開貼文、個人檔案、限時動態或私訊，找出真正有風險的地方！</div>';
+ const cs=COMBOS.filter(x=>x.need.every(n=>clues.includes(n)));$('#comboWrap').classList.toggle('hide',!cs.length);$('#comboList').innerHTML=cs.map(x=>`<div class="combo">${x.t}</div>`).join('');
+ const ws=Object.values(wrongSpots);$('#wrongWrap').classList.toggle('hide',!ws.length);$('#wrongList').innerHTML=ws.map(w=>`<div class="wrong"><b>${w.label}</b>${w.w}</div>`).join('')}
+function removeClue(id){clues=clues.filter(x=>x!==id);Object.keys(foundSpots).forEach(k=>{if(foundSpots[k]===id)delete foundSpots[k]});renderClues();toast('已從筆記移除')}
+function openCase(){$('#caseOverlay').classList.add('show');renderClues()}
+function submitCase(){let a=$('#inference').value.trim(),b=$('#risk').value.trim(),c=$('#advice').value.trim();if(!a||!b||!c){toast('請完成三個反思欄位');return}const items=['我發文時常開啟定位','我會公開說出固定的時間或行程（例如每週幾、幾點）','我的簡介寫了全名、學校或社團','我會在公開貼文標註朋友，沒有先問過','我會把私人心情發在限動或摯友','我會回覆不認識的人的提問','我拍照時常拍到窗外、門牌或校名'];
+$('#caseFeedback').classList.remove('hide');
+$('#caseFeedback').innerHTML='<b>🕵️ 調查紀錄完成！</b><p>你把分散在貼文、留言、限動、Reels 與私訊裡的資訊拼起來了。每一則單看都不嚴重，但組合起來就能回答「她是誰、在哪裡、什麼時候落單」。</p><p><b>⚠️ 這些資訊落到有心人手上，可能發生：</b></p><ul style="margin:4px 0 8px;padding-left:18px"><li>在放學路上或補習班外被人等候、尾隨</li><li>被陌生人用「巧合」搭話並邀約見面</li><li>被假冒團體或活動的人騙取個資</li><li>私人心情被截圖轉傳，變成霸凌的素材</li></ul><p><b>🪞 想想你自己，勾選符合你的習慣：</b></p>'+items.map(t=>`<label class="selfchk"><input type="checkbox" class="chk" onchange="selfCheck()"> ${t}</label>`).join('')+'<div id="selfResult" style="margin:8px 0;font-weight:650"></div><p><b>💡 記住：</b>發文前檢查「定位、背景、時間、標註」；固定行程等結束後再發；不回覆陌生人的追問；私人內容先想想會不會被傳出去。</p>';$('#caseFeedback').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function selfCheck(){const n=document.querySelectorAll('#caseFeedback .chk:checked').length;$('#selfResult').textContent=n===0?'很棒！繼續保持發文前先檢查的習慣 👍':'你勾了 '+n+' 項，這些都是故事裡語澄踩到的地方。這週先挑一項來調整吧！'}
+
+/* ── 偵查點：點貼文／個人檔案裡的頭像、照片、定位、文字、留言 ── */
+function spotKey(pid,a,i){return pid+':'+a+':'+(i==null?'':i)}
+function spotCls(pid,a,i){const k=spotKey(pid,a,i);return 'inspectable'+(foundSpots[k]?' hit':wrongSpots[k]?' safe':'')}
+function insAttr(pid,a,i){return `onclick="inspect(this,'${pid}','${a}'${i==null?'':','+i})"`}
+function spotLabel(pid,a,i){if(pid==='profile')return '個人檔案的'+AREA[a];const p=postById(pid);if(a==='comment'){const c=p.comments[i];return c[0]+' 的留言：「'+c[1]+'」'}if(a==='caption')return p.user+' 的貼文文字';return p.user+' 的貼文'+AREA[a]}
+function inspect(el,pid,a,i){const k=spotKey(pid,a,i),s=(SPOTS[pid]||[]).find(x=>x.a===a&&(x.i==null?i==null:x.i===i))||{r:0,w:'這個部分看不出明顯的風險。再找找其他地方吧！'},label=spotLabel(pid,a,i);let h='';
+ if(s.r){if(foundSpots[k]){h=`<div class="insp-title">🚩 這裡你已經記錄過了</div><div class="insp-src">${label}</div><p>${s.w}</p>`}
+  else{foundSpots[k]=s.c;const pts=addClue(s.c,label,true);el.classList.remove('safe');el.classList.add('hit');h=`<div class="insp-title">🚩 找到了！這裡有風險</div><div class="insp-src">${label}</div><p>${s.w}</p><div class="mission">已加入調查筆記：<b>${clueData[s.c].title}</b><br>${pts?'調查進度 +'+pts+'%':'這條線索原本就在筆記裡，這是另一個證據。'}${allClues()?'<br>🎉 調查進度 100%！可以到調查筆記完成結案任務。':''}</div>`}}
+ else{if(!wrongSpots[k]){wrongSpots[k]={label,w:s.w};renderClues()}el.classList.add('safe');h=`<div class="insp-title">🤔 這裡不是主要風險</div><div class="insp-src">${label}</div><p>${s.w}</p><div class="mission" style="color:#4a8f5a">已記在筆記的「我判斷過的地方」。不是每個地方都有問題，繼續找找看！</div>`}
+ $('#inspectBody').innerHTML=h+'<button class="primary" style="width:100%" onclick="hide(\'inspectOverlay\')">繼續探索</button>';$('#inspectOverlay').classList.add('show')}
+function clearCaseAnswers(){['inference','risk','advice'].forEach(id=>$('#'+id).value='');$('#caseFeedback').classList.add('hide');toast('已清除文字')}
+
+/* ── 限時動態：右側下一張、左側上一張，看完自動接下一位 ── */
+function renderStoriesBar(){$('#storiesBar').innerHTML=storyOrder.map(k=>`<button class="story" data-id="${k}" onclick="openStory('${k}')"><div class="ring"><span>${av(storyGroups[k].user)}</span></div>${storyGroups[k].user}</button>`).join('')}
+function openStory(id){storyKey=id;storyIdx=0;renderStory();$('#storyOverlay').classList.add('show')}
+function renderStory(){const g=storyGroups[storyKey],s=g.slides[storyIdx],src=slideSrc(storyKey,storyIdx,s),has=hasMedia(src);$('#storyUser').textContent=g.user;$('#storyContent').innerHTML=`<div class="story-stage ${has?'withimg':''}">${has?mediaHTML(src,{cls:'story-img',v:'story'}):''}<div class="story-text">${s.text}</div></div>`;$('#storyBars').innerHTML=g.slides.map((_,i)=>`<div style="flex:1;height:3px;background:#ffffff88;border-radius:4px;overflow:hidden"><div style="width:${i<=storyIdx?100:0}%;height:100%;background:#fff"></div></div>`).join('');const r=document.querySelector(`.story[data-id="${storyKey}"] .ring`);if(r)r.classList.add('seen')}
+function storyNext(){const g=storyGroups[storyKey];if(storyIdx<g.slides.length-1){storyIdx++;renderStory();return}const o=storyOrder.indexOf(storyKey);if(o>=0&&o<storyOrder.length-1){storyKey=storyOrder[o+1];storyIdx=0;renderStory()}else hide('storyOverlay')}
+function storyPrev(){if(storyIdx>0){storyIdx--;renderStory();return}const o=storyOrder.indexOf(storyKey);if(o>0){storyKey=storyOrder[o-1];storyIdx=0;renderStory()}}
+function addStoryClue(){addClue(storyGroups[storyKey].slides[storyIdx].clue,'限時動態：'+storyGroups[storyKey].user)}
+
+/* ── 貼文 ── */
+function sceneHTML(p,ins){const cap=p.scene==='school'?'今天也有好好練球！':p.scene==='drink'?'放學後的小確幸':p.scene==='friends'?'和朋友的日常':p.scene==='park'?'夕陽時間':p.scene==='court'?'練習日常':p.scene==='study'?'今天的生活紀錄':'療癒時刻',src=postSrc(p);return `<div class="photo ${p.scene} ${hasMedia(src)?'has-img':''} ${ins?spotCls(p.id,'photo'):''}" ${ins?insAttr(p.id,'photo'):''}>${mediaHTML(src,{cls:'photo-img',v:'feed'})}<div class="scene-label">${p.art}</div>${p.place?`<div class="location ${ins?spotCls(p.id,'place'):''}" ${ins?`onclick="event.stopPropagation();inspect(this,'${p.id}','place')"`:''}>📍 ${p.place}</div>`:''}<div class="photo-caption">${cap}</div></div>`}
+function renderFeed(){$('#feed').innerHTML=posts.map(p=>`<article class="post"><div class="post-head"><div class="avatar">${av(p.user)}</div><div class="userline">${p.user} <span class="verified">●</span><div class="subline">${p.sub}</div></div><button class="more" onclick="postMenu('${p.id}')">•••</button></div><div onclick="openPost('${p.id}')">${sceneHTML(p)}</div><div class="post-actions">${ACTIONS(`onclick="openPost('${p.id}')"`)}</div><div class="likes">${p.likes} 個讚</div><p class="caption"><b>${p.user}</b> ${p.caption}</p><p class="comments-link" onclick="openPost('${p.id}')">查看全部 ${p.comments.length+6} 則留言</p><p class="timestamp">${p.time}</p></article>`).join('')}
+function openPost(id){currentPost=id;const p=postById(id);$('#postDetail').innerHTML=`<div class="inspect-bar">🔍 <b>偵探模式</b>：點點看這篇貼文的<b>頭像、照片、定位、文字、留言</b>，找出真正有風險的地方。不是每個地方都有問題喔！</div><div class="post-head"><div class="avatar ${spotCls(id,'avatar')}" ${insAttr(id,'avatar')}>${av(p.user)}</div><div class="userline">${p.user}<div class="subline">${p.sub}</div></div><button class="more" onclick="postMenu('${id}')">•••</button></div>${sceneHTML(p,true)}<div class="post-actions">${ACTIONS('')}</div><div class="likes">${p.likes} 個讚</div><p class="caption ${spotCls(id,'caption')}" ${insAttr(id,'caption')}><b>${p.user}</b> ${p.caption}</p>`;$('#postComments').innerHTML=p.comments.map((c,i)=>`<div class="comment ${spotCls(id,'comment',i)}" ${insAttr(id,'comment',i)}><b>${c[0]}</b>${c[1]}</div>`).join('');$('#postOverlay').classList.add('show')}
+function sendComment(){let input=$('#commentInput');if(input.value.trim()){let d=document.createElement('div');d.className='comment';d.textContent='你　'+input.value;$('#postComments').appendChild(d);input.value='';toast('留言已加入（模擬）')}}
+function postMenu(id){currentMenuPost=id;$('#menuItems').innerHTML=`<button class="menu-option blue" onclick="hide('menuOverlay');openPost('${id}')">🔍 檢查這篇貼文</button><button class="menu-option" onclick="toast('已複製連結（模擬）');hide('menuOverlay')">複製連結</button><button class="menu-option" onclick="hide('menuOverlay')">取消</button>`;$('#menuOverlay').classList.add('show')}
+
+function like(btn){const on=btn.classList.toggle('liked');toast(on?'已按讚（模擬）':'已取消讚')}
+function savePost(btn){const on=btn.classList.toggle('saved');toast(on?'已儲存貼文（模擬）':'已取消儲存')}
+
+/* ── 探索與搜尋 ── */
+function tiles(ids){return ids.map(id=>`<button class="tile" onclick="openPost('${id}')">${thumb(id)}</button>`).join('')}
+function renderExplore(){$('#exploreGrid').innerHTML=tiles(EXPLORE_POSTS)}
+function searchExplore(q){const r=$('#searchResults');if(!q.trim()){r.innerHTML='';return}const k=q.toLowerCase();const matches=posts.filter(p=>(p.user+p.caption+p.place+p.sub).toLowerCase().includes(k));const accounts=Object.keys(ACCOUNTS).filter(u=>(u+ACCOUNTS[u].label).toLowerCase().includes(k));r.innerHTML=accounts.map(u=>`<button class="result-row" onclick="showAccount('${u}')"><div class="avatar">${av(u)}</div><div class="result-meta"><b>${u}</b><small>${acc(u).label}</small></div>›</button>`).join('')+matches.map(p=>`<button class="result-row" onclick="openPost('${p.id}')"><div class="avatar">${thumb(p.id)}</div><div class="result-meta"><b>${p.user}</b><small>${p.caption}</small></div>›</button>`).join('')||'<div class="empty">找不到相關內容，試試其他關鍵字。</div>'}
+function showAccount(user){if(user===PROFILE.user)showPage('profile');else{const p=posts.find(x=>x.user===user);if(p)openPost(p.id);else toast('這個帳號目前沒有貼文')}}
+
+/* ── 通知 ── */
+function renderActivity(){const rows=ACTIVITY_LOCKED.map((r,i)=>actOn[i]?Object.assign({isNew:true},r):null).filter(Boolean).reverse().concat(ACTIVITY);$('#activityList').innerHTML=rows.map(r=>`<div class="dm-row" ${r.chat?`style="cursor:pointer" onclick="openChat('${r.chat}')"`:''}><div class="avatar" style="width:46px;height:46px">${av(r.user)}</div><div class="dm-text"><b>${r.user}</b>${r.isNew?'<span class="newtag">新</span>':''}<p>${r.text}</p></div><small>${r.time}</small></div>`).join('')}
+
+/* ── 私訊：未讀紅點與逐則顯示 ── */
+function updateDmBadge(){const n=dmOrder.filter(k=>unread[k]).length,b=$('#dmBadge');b.textContent=n;b.classList.toggle('hide',n===0)}
+function renderDM(){$('#dmList').innerHTML=dmOrder.map(k=>{const c=chats[k],u=unread[k];return `<button class="dm-row ${u?'unread':''}" onclick="openChat('${k}')"><div class="avatar" style="width:46px;height:46px">${av(c.user)}</div><div class="dm-text"><b>${c.user}</b><p>${c.msgs[Math.max(chatShown[k],1)-1][1]}</p></div>${u?'<span class="unread-dot">●</span>':''}</button>`}).join('');updateDmBadge()}
+function openChat(id){currentChat=id;unread[id]=false;if(chatShown[id]<1)chatShown[id]=1;renderChat();showPage('chat')}
+function renderChat(){const c=chats[currentChat],n=chatShown[currentChat],total=c.msgs.length;$('#chatName').textContent=c.user;$('#chatBody').innerHTML='<div class="chat-date">今天</div>'+c.msgs.slice(0,n).map(m=>`<div class="bubble-chat ${m[0]==='mine'?'mine':''}">${m[1]}</div>`).join('');const h=$('#chatHint');if(n<total){h.className='chat-hint';h.textContent=`👆 點一下螢幕，看下一則訊息（還有 ${total-n} 則）`;$('#chatClueWrap').classList.add('hide')}else{h.className='chat-hint done';h.textContent=c.clue?'✅ 對話看完了！想一想：對方想做什麼？這段對話透露了什麼？':'✅ 對話看完了！這段對話看起來沒有明顯風險';$('#chatClueWrap').classList.toggle('hide',!c.clue)}window.scrollTo(0,document.body.scrollHeight)}
+function nextMsg(){const total=chats[currentChat].msgs.length;if(chatShown[currentChat]<total){chatShown[currentChat]++;renderChat()}}
+function addChatClue(){addClue(chats[currentChat].clue,'私訊：'+chats[currentChat].user)}
+
+/* ── 個人檔案 ── */
+function renderProfile(){$('#profileTitle').textContent=PROFILE.user+' ⌄';$('#profileAvatar').innerHTML=av(PROFILE.user);$('#navAvatar').innerHTML=av(PROFILE.user);$('#profileName').textContent=PROFILE.name;$('#profileBio').innerHTML=PROFILE.bio;$('#followers').textContent=PROFILE.followers;$('#following').textContent=PROFILE.following;$('#postCount').textContent=PROFILE_POSTS.length;$('#highlights').innerHTML=HIGHLIGHTS.map(h=>`<button class="highlight" onclick="openStory('${h.key}')"><div class="bubble">${imgOr(h.cover,h.emoji)}</div>${h.label}</button>`).join('')}
+function profileTab(btn,type){document.querySelectorAll('.profile-tabs button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');$('#profileGrid').innerHTML=tiles(type==='posts'?PROFILE_POSTS:type==='reels'?PROFILE_REELS:PROFILE_TAGGED)}
+
+/* ── Reels：上下滑動（手機滑動 / 滑鼠拖曳 / 滾輪 / 鍵盤上下鍵） ── */
+function renderReels(){
+  $('#reelsTrack').innerHTML=REELS.map((r,i)=>{
+    const media=mediaHTML(reelSrc(r,i),{cls:'reel-media',v:'reel',mode:'vid'});
+    return `<div class="reel"><div class="reel-art ${i%2?'alt':''}">${r.emoji}</div>${media}<div class="reel-pause">▶</div><div class="reel-shade"></div><div class="reel-copy"><div class="reel-user"><div class="avatar">${av(r.user)}</div>${r.user}</div><p style="margin:0">${r.text}</p><small>${r.audio}</small></div><div class="reel-side"><button onclick="likeReel(this)">♡<span>${r.likes}</span></button><button onclick="toast('留言內容可在相關貼文中查看')">▢<span>留言</span></button><button onclick="addClue('${r.clue}','Reels：${r.user}')">🗂️<span>筆記</span></button><button class="mutebtn" onclick="toggleMute()">${reelMuted?'🔇':'🔊'}<span>聲音</span></button></div></div>`}).join('');
+  goReel(0)}
+function goReel(i){if(i<0||i>=REELS.length)return;reelIdx=i;$('#reelsTrack').style.transform=`translateY(-${i*100}%)`;$('#reelCounter').textContent=(i+1)+' / '+REELS.length;$('#reelHint').classList.toggle('hide',i>0||REELS.length<2);syncReelVideo()}
+let reelMuted=true;
+function syncReelVideo(){const on=$('#reels').classList.contains('active');document.querySelectorAll('#reelsTrack .reel').forEach((el,i)=>{const v=el.querySelector('video');if(!v)return;v.muted=reelMuted;if(on&&i===reelIdx&&!el.classList.contains('paused')){const p=v.play();if(p&&p.catch)p.catch(()=>{})}else{v.pause();if(i!==reelIdx){try{v.currentTime=0}catch(e){}el.classList.remove('paused')}}})}
+function toggleMute(){reelMuted=!reelMuted;document.querySelectorAll('.mutebtn').forEach(b=>b.firstChild.textContent=reelMuted?'🔇':'🔊');syncReelVideo();toast(reelMuted?'已靜音':'已開啟聲音')}
+function toggleReelPlay(){const el=document.querySelectorAll('#reelsTrack .reel')[reelIdx];if(!el||!el.querySelector('video'))return;el.classList.toggle('paused');syncReelVideo()}
+function likeReel(btn){const on=btn.firstChild.textContent==='♥';btn.firstChild.textContent=on?'♡':'♥';btn.style.color=on?'':'#ff3040';toast(on?'已取消讚':'已按讚（模擬）')}
+(function(){const w=$('#reelsWrap');let sy=null,lock=0;
+  w.addEventListener('pointerdown',e=>{sy=e.clientY});
+  w.addEventListener('pointerup',e=>{if(sy===null)return;const dy=e.clientY-sy;sy=null;if(dy<-40)goReel(reelIdx+1);else if(dy>40)goReel(reelIdx-1);else if(Math.abs(dy)<10&&!e.target.closest('.reel-side'))toggleReelPlay()});
+  w.addEventListener('pointercancel',()=>{sy=null});
+  w.addEventListener('wheel',e=>{e.preventDefault();const t=Date.now();if(t-lock<600||Math.abs(e.deltaY)<15)return;lock=t;goReel(reelIdx+(e.deltaY>0?1:-1))},{passive:false});
+  document.addEventListener('keydown',e=>{if(!$('#reels').classList.contains('active'))return;if(e.key==='ArrowDown')goReel(reelIdx+1);if(e.key==='ArrowUp')goReel(reelIdx-1)});
+})();
+
+/* ── 啟動 ── */
+document.title=APP_NAME+'｜數位足跡偵探';$('#brandName').textContent=APP_NAME;
+renderStoriesBar();renderFeed();renderExplore();renderActivity();renderDM();renderProfile();
+profileTab(document.querySelector('.profile-tabs button.selected'),'posts');renderReels();renderClues();
+</script>
+</body>
+</html>
